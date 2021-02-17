@@ -5,6 +5,7 @@ which uses a recurrent structure to propagates in time.
 """
 
 
+from fourier_3d import TEST_PATH, TRAIN_PATH
 import torch
 import numpy as np
 import torch.nn as nn
@@ -165,8 +166,10 @@ class Net2d(nn.Module):
 ################################################################
 # configs
 ################################################################
-TRAIN_PATH = 'data/ns_data_V10000_N1200_T20.mat'
-TEST_PATH = 'data/ns_data_V10000_N1200_T20.mat'
+# TRAIN_PATH = 'data/ns_data_V10000_N1200_T20.mat'
+# TEST_PATH = 'data/ns_data_V10000_N1200_T20.mat'
+TRAIN_PATH = '/HPS/deep_topopt/work/fourier_neural_operator/data/NavierStokes_V1e-5_N1200_T20.mat'
+TEST_PATH = '/HPS/deep_topopt/work/fourier_neural_operator/data/NavierStokes_V1e-5_N1200_T20.mat'
 
 ntrain = 1000
 ntest = 200
@@ -313,26 +316,26 @@ for ep in range(epochs):
     scheduler.step()
     print(ep, t2 - t1, train_l2_step / ntrain / (T / step), train_l2_full / ntrain, test_l2_step / ntest / (T / step),
           test_l2_full / ntest)
-# torch.save(model, path_model)
+torch.save(model, path_model)
 
 
-# pred = torch.zeros(test_u.shape)
-# index = 0
-# test_loader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(test_a, test_u), batch_size=1, shuffle=False)
-# with torch.no_grad():
-#     for x, y in test_loader:
-#         test_l2 = 0;
-#         x, y = x.cuda(), y.cuda()
-#
-#         out = model(x)
-#         out = y_normalizer.decode(out)
-#         pred[index] = out
-#
-#         test_l2 += myloss(out.view(1, -1), y.view(1, -1)).item()
-#         print(index, test_l2)
-#         index = index + 1
+pred = torch.zeros(test_u.shape)
+index = 0
+test_loader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(test_a, test_u), batch_size=1, shuffle=False)
+with torch.no_grad():
+    for x, y in test_loader:
+        test_l2 = 0;
+        x, y = x.cuda(), y.cuda()
 
-# scipy.io.savemat('pred/'+path+'.mat', mdict={'pred': pred.cpu().numpy()})
+        out = model(x)
+        out = y_normalizer.decode(out)
+        pred[index] = out
+
+        test_l2 += myloss(out.view(1, -1), y.view(1, -1)).item()
+        print(index, test_l2)
+        index = index + 1
+
+scipy.io.savemat('pred/'+path+'.mat', mdict={'pred': pred.cpu().numpy()})
 
 
 

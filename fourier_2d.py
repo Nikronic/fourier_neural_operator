@@ -3,6 +3,8 @@
 This file is the Fourier Neural Operator for 2D problem such as the Darcy Flow discussed in Section 5.2 in the [paper](https://arxiv.org/pdf/2010.08895.pdf).
 """
 
+import os, sys
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -14,6 +16,8 @@ import matplotlib.pyplot as plt
 import operator
 from functools import reduce
 from functools import partial
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from timeit import default_timer
 from utilities3 import *

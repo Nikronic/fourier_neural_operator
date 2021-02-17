@@ -138,7 +138,7 @@ learning_rate = 0.001
 ################################################################
 # reading data and normalization
 ################################################################
-dataloader = MatReader('data/burgers_data_R10.mat')
+dataloader = MatReader('data/burgers_R10.mat')
 x_data = dataloader.read_field('a')[:,::sub]
 y_data = dataloader.read_field('u')[:,::sub]
 

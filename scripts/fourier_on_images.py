@@ -11,6 +11,9 @@ import operator
 from functools import reduce
 from functools import partial
 
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from timeit import default_timer
 from utilities3 import *
 

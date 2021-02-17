@@ -3,6 +3,9 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 import matplotlib.pyplot as plt
 from utilities3 import *
 

@@ -7,11 +7,13 @@ import h5py
 import scipy.io
 import matplotlib.pyplot as plt
 from timeit import default_timer
-import sys
+import sys, os
 import math
 
 import operator
 from functools import reduce
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from timeit import default_timer
 from utilities import *

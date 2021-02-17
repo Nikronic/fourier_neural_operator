@@ -1,7 +1,11 @@
+import sys, os
+
 import torch
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 import matplotlib.pyplot as plt
 from utilities3 import *

@@ -318,7 +318,7 @@ for ep in range(epochs):
 
     t2 = default_timer()
     print(ep, t2-t1, train_mse, train_l2, test_l2)
-# torch.save(model, path_model)
+torch.save(model, path_model)
 
 
 pred = torch.zeros(test_u.shape)

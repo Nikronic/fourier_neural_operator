@@ -3,6 +3,10 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+
+import os, sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from utilities3 import *
 import operator
 from functools import reduce

@@ -3,6 +3,7 @@
 This file is the Fourier Neural Operator for 1D problem such as the (time-independent) Burgers equation discussed in Section 5.1 in the [paper](https://arxiv.org/pdf/2010.08895.pdf).
 """
 
+import os, sys
 
 import numpy as np
 import torch
@@ -11,6 +12,7 @@ import torch.nn.functional as F
 from torch.nn.parameter import Parameter
 import matplotlib.pyplot as plt
 
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 import operator
 from functools import reduce
 from functools import partial
@@ -173,7 +175,8 @@ width = 64
 ################################################################
 
 # Data is of the shape (number of samples, grid size)
-dataloader = MatReader('data/burgers_data_R10.mat')
+# dataloader = MatReader('data/burgers_data_R10.mat')
+dataloader = MatReader('/HPS/deep_topopt/work/fourier_neural_operator/data/burgers_R10.mat')
 x_data = dataloader.read_field('a')[:,::sub]
 y_data = dataloader.read_field('u')[:,::sub]
 
@@ -193,7 +196,7 @@ test_loader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(x_test,
 
 # model
 model = Net1d(modes, width).cuda()
-print(model.count_params())
+sys.stderr.write('{}\n'.format(model.count_params()))
 
 
 ################################################################
@@ -238,9 +241,9 @@ for ep in range(epochs):
     test_l2 /= ntest
 
     t2 = default_timer()
-    print(ep, t2-t1, train_mse, train_l2, test_l2)
+    sys.stderr.write('{}, {}, {}, {}, {}\n'.format(ep, t2-t1, train_mse, train_l2, test_l2))
 
-# torch.save(model, 'model/ns_fourier_burgers_8192')
+torch.save(model, 'model/ns_fourier_burgers_8192')
 pred = torch.zeros(y_test.shape)
 index = 0
 test_loader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(x_test, y_test), batch_size=1, shuffle=False)
@@ -253,7 +256,7 @@ with torch.no_grad():
         pred[index] = out
 
         test_l2 += myloss(out.view(1, -1), y.view(1, -1)).item()
-        print(index, test_l2)
+        sys.stderr.write('{}, {}\n'.format(index, test_l2))
         index = index + 1
 
-# scipy.io.savemat('pred/burger_test.mat', mdict={'pred': pred.cpu().numpy()})
+scipy.io.savemat('pred/burger_test.mat', mdict={'pred': pred.cpu().numpy()})
